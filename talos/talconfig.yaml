@@ -1,0 +1,224 @@
+clusterName: k8s.clt.johnson.computer
+talosVersion: v1.3.5
+kubernetesVersion: v1.25.7
+endpoint: https://api.k8s.clt.johnson.computer:6443
+domain: cluster.local
+allowSchedulingOnMasters: true
+additionalMachineCertSans:
+  - api.k8s.clt.johnson.computer
+  - 10.0.2.5
+additionalApiServerCertSans:
+  - api.k8s.clt.johnson.computer
+  - 10.0.2.5
+clusterPodNets:
+  - 10.244.0.0/16
+clusterSvcNets:
+  - 10.96.0.0/12
+cniConfig:
+  name: custom
+  urls:
+    - https://dl.johnson.software/k8s/cni-manifests/cilium.yaml
+nodes:
+  - hostname: hv01
+    ipAddress: 10.0.2.10
+    installDisk: /dev/nvme0n1
+    controlPlane: true
+    nodeLabels:
+      kubernetes.io/hostname: hv01.clt.johnson.computer
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      node.kubernetes.io/instance-type: t330-gen1
+    nameservers:
+      - 1.0.0.1
+      - 1.1.1.1
+    networkInterfaces:
+      - interface: enxe41d2d09c2d0
+        addresses:
+          - 10.0.2.10/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        # wireguard:
+        #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
+        #   listenPort: 51111
+        #   peers:
+        #     - publicKey: kyiu4YOZqX+7tY4fdiIRNDe2lSEvlun76EWtD/jP1hU=
+        #       endpoint: 192.168.1.3:1111
+        #       allowedIPs:
+        #         - 192.168.1.0/24
+        #       persistentKeepaliveInterval: 10s
+      # eno1
+      - interface: enx509a4c6059e7
+        dhcp: false
+        ignore: true
+      # eno2
+      - interface: enx509a4c6059e8
+        dhcp: false
+        ignore: true
+  - hostname: hv02
+    ipAddress: 10.0.2.10
+    installDisk: /dev/nvme0n1
+    controlPlane: false
+    nodeLabels:
+      kubernetes.io/hostname: hv02.clt.johnson.computer
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      node.kubernetes.io/instance-type: r430-gen1
+    nameservers:
+      - 1.0.0.1
+      - 1.1.1.1
+    networkInterfaces:
+      - interface: enxe41d2d124690
+        addresses:
+          - 10.0.2.11/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        # wireguard:
+        #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
+        #   listenPort: 51111
+        #   peers:
+        #     - publicKey: kyiu4YOZqX+7tY4fdiIRNDe2lSEvlun76EWtD/jP1hU=
+        #       endpoint: 192.168.1.3:1111
+        #       allowedIPs:
+        #         - 192.168.1.0/24
+        #       persistentKeepaliveInterval: 10s
+      # eno1
+      - interface: enx44a8422df5b5
+        dhcp: false
+        ignore: true
+      # eno2
+      - interface: enx44a8422df5b6
+        dhcp: false
+        ignore: true
+      # eno3
+      - interface: enx44a8422df5b7
+        dhcp: false
+        ignore: true
+      # eno4
+      - interface: enx44a8422df5b8
+        dhcp: false
+        ignore: true
+  - hostname: hv04
+    ipAddress: 10.0.2.13
+    installDisk: /dev/nvme0n1
+    controlPlane: true
+    nodeLabels:
+      kubernetes.io/hostname: hv04.clt.johnson.computer
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      node.kubernetes.io/instance-type: r430-gen2-r1
+    nameservers:
+      - 1.0.0.1
+      - 1.1.1.1
+    networkInterfaces:
+      - interface: enxf452148885f0
+        addresses:
+          - 10.0.2.13/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        # wireguard:
+        #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
+        #   listenPort: 51111
+        #   peers:
+        #     - publicKey: kyiu4YOZqX+7tY4fdiIRNDe2lSEvlun76EWtD/jP1hU=
+        #       endpoint: 192.168.1.3:1111
+        #       allowedIPs:
+        #         - 192.168.1.0/24
+        #       persistentKeepaliveInterval: 10s
+      # eno1
+      - interface: enx1418773363dd
+        dhcp: false
+        ignore: true
+      # eno2
+      - interface: enx1418773363de
+        dhcp: false
+        ignore: true
+      # eno3
+      - interface: enx1418773363df
+        dhcp: false
+        ignore: true
+      # eno4
+      - interface: enx1418773363e0
+        dhcp: false
+        ignore: true
+  - hostname: hv05
+    ipAddress: 10.0.2.14
+    installDisk: /dev/nvme0n1
+    controlPlane: true
+    nodeLabels:
+      kubernetes.io/hostname: hv05.clt.johnson.computer
+      topology.kubernetes.io/region: us-east-1
+      topology.kubernetes.io/zone: us-east-1a
+      node.kubernetes.io/instance-type: r430-gen2-r2
+    nameservers:
+      - 1.0.0.1
+      - 1.1.1.1
+    networkInterfaces:
+      - interface: enxe41d2d0fdf80
+        addresses:
+          - 10.0.2.14/24
+        mtu: 1500
+        routes:
+          - network: 0.0.0.0/0
+            gateway: 10.0.2.1
+        # wireguard:
+        #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
+        #   listenPort: 51111
+        #   peers:
+        #     - publicKey: kyiu4YOZqX+7tY4fdiIRNDe2lSEvlun76EWtD/jP1hU=
+        #       endpoint: 192.168.1.3:1111
+        #       allowedIPs:
+        #         - 192.168.1.0/24
+        #       persistentKeepaliveInterval: 10s
+      # eno1
+      - interface: enx44a84241686d
+        dhcp: false
+        ignore: true
+      # eno2
+      - interface: enx44a84241686e
+        dhcp: false
+        ignore: true
+      # eno3
+      - interface: enx44a84241686f
+        dhcp: false
+        ignore: true
+      # eno4
+      - interface: enx44a842416870
+        dhcp: false
+        ignore: true
+  # - hostname: kworker1
+  #   ipAddress: 192.168.200.13
+  #   controlPlane: false
+  #   installDisk: /dev/sdb
+  #   patches:
+  #     - |-
+  #       machine:
+  #         network:
+  #           interfaces:
+  #             - addresses:
+  #                 - 192.168.200.11/24
+  #               interface: eth1
+  #               routes:
+  #                 - gateway: 192.168.200.1
+  #                 - network: 0.0.0.0/0
+# controlPlane:
+#   patches:
+#     - |-
+#       - op: add
+#         path: /machine/kubelet/extraArgs
+#         value:
+#           feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+#           rotate-server-certificates: "true"
+# worker:
+#   patches:
+#     - |-
+#       - op: add
+#         path: /machine/kubelet/extraArgs
+#         value:
+#           feature-gates: GracefulNodeShutdown=false,MixedProtocolLBService=false
+#           rotate-server-certificates: "true"
