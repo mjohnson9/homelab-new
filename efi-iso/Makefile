@@ -1,49 +1,42 @@
-.PHONY: all
-all: build/efi-utils.iso
-	@echo --all--
+file_list = EFI/drivers/NvmExpressDxe.efi EFI/shell/shellx64.efi EFI/shell/shellia32.efi EFI/shell/startup.nsh
 
-clean:
-	rm -rfv esp build
+.PHONY: all clean distclean test
 
-esp:
-	mkdir esp
+all: build/efi-utils.iso ;
 
-esp/EFI: | esp
-	mkdir esp/EFI
+$(file_list) : $(@F)
+	@mkdir -p "$(@D)"
+	@cp -afv "$(@F)" "$(@D)"
 
-esp/EFI/drivers: | esp/EFI
-	mkdir esp/EFI/drivers
+build/efi-utils.esp.img(%): % ;
 
-esp/EFI/drivers/NvmExpressDxe.efi : NvmExpressDxe.efi | esp/EFI/drivers
-	cp -af "$<" "$@"
+build/efi-utils.esp.img: build/efi-utils.esp.img($(file_list))
+	@mkdir -p "$(@D)"
+	@if [ ! -s "$@" ]; then \
+		fallocate --posix --length "4MiB" "$@" ; \
+		mformat -i "$@" :: ; \
+	fi
 
-esp/EFI/shell : | esp/EFI
-	mkdir esp/EFI/shell
+	mcopy -D overwrite -Q -s -p -m -i "$@" EFI ::EFI
 
-esp/EFI/shell/shellx64.EFI: shellx64.efi | esp/EFI/shell
-	cp -af "$<" "$@"
+build/efi-utils.iso(%): % ;
 
-esp/EFI/shell/shellia32.EFI: shellia32.efi | esp/EFI/shell
-	cp -af "$<" "$@"
-
-esp/EFI/shell/startup.nsh: startup.nsh | esp
-	cp -af "$<" "$@"
-
-build:
-	mkdir build
-
-build/efi-utils.esp.img: esp/EFI/shell/shellx64.EFI esp/EFI/shell/shellia32.EFI esp/EFI/shell/startup.nsh esp/EFI/drivers/NvmExpressDxe.efi | build esp
+build/efi-utils.iso: build/efi-utils.iso(build/efi-utils.esp.img)
+	@mkdir -p "$(@D)"
 	@rm -f "$@"
-	fallocate --posix --length "2MiB" "$@"
-	mformat -i "$@" ::
-
-	mcopy -Q -s -p -m -i "$@" esp/EFI ::EFI
-
-build/efi-utils.iso: build/efi-utils.esp.img | build
-	@rm -f "$@"
-	xorriso -indev "$<" \
+	xorriso -indev "$?" \
 		-outdev "$@" \
 		-boot_image any replay \
-		-append_partition 2 0xef "$<" \
+		-append_partition 2 0xef "$?" \
 		-map_l ./ /EFI/shell/ shellx64.efi shellia32.efi startup.nsh -- \
 		-map_l ./ /EFI/drivers/ NvmExpressDxe.efi
+
+test:
+	@echo "This project does not have tests."
+
+clean:
+	rm -fv $(file_list) \
+		build/efi-utils.esp.img build/efi-utils.iso
+
+distclean:
+	rm -rfv EFI build
