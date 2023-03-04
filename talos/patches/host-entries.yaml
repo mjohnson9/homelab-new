@@ -1,0 +1,22 @@
+- op: add
+  path: /machine/network/extraHostEntries
+  value:
+    # apiserver virtual IP
+    - ip: 10.0.2.5
+      aliases: ["api.k8s.clt.johnson.computer"]
+
+    # Nodes
+    - ip: 10.0.2.10
+      aliases: ["hv01.clt.johnson.computer"]
+    - ip: 10.0.2.11
+      aliases: ["hv02.clt.johnson.computer"]
+    - ip: 10.0.2.13
+      aliases: ["hv04.clt.johnson.computer"]
+    - ip: 10.0.2.14
+      aliases: ["hv05.clt.johnson.computer"]
+
+    # Routers
+    - ip: 10.0.2.1
+      aliases: ["if-servers.gateway.clt.johnson.computer"]
+    - ip: 76.234.108.192
+      aliases: ["gateway.clt.johnson.computer"]

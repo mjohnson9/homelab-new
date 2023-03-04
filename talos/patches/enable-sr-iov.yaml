@@ -1,0 +1,7 @@
+# tell etcd which IP to advertise
+- op: add
+  path: /machine/kernel
+  value:
+    modules:
+      - name: mlx4_core
+        parameters: ["num_vfs=126", "port_type_array=2,2"]

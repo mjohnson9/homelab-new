@@ -1,0 +1,24 @@
+- op: add
+  path: /machine/kubelet/nodeIP
+  value:
+    # tell the nodes how to figure out what their reportable IP is
+    validSubnets:
+      - 10.0.2.0/24
+      - '!10.0.2.5/32'
+
+- op: add
+  path: /machine/kubelet/extraArgs
+  value:
+    feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
+    rotate-server-certificates: "true"
+
+- op: add
+  path: /machine/kubelet/extraConfig
+  value:
+    # disable the CPU quotas; they're generally harmful
+    cpuCFSQuota: false
+
+# disable kube-proxy; it's replaced by Cilium
+- op: add
+  path: /cluster/proxy
+  value: {disabled: true}

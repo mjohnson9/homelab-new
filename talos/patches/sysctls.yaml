@@ -1,0 +1,19 @@
+- op: add
+  path: /machine/sysctls
+  value:
+    # use CoDEL by default
+    net.core.default_qdisc: fq_codel
+
+    # enable use of Explicit Network Congestion
+    net.ipv4.tcp_ecn: 1
+
+    # enable use of aggregated TCP ACKs
+    net.ipv4.tcp_sack: 1
+    net.ipv4.tcp_dsack: 1
+
+    # enable path MTU discovery
+    net.ipv4.tcp_mtu_probing: 2
+    net.ipv4.tcp_base_mss: 1024
+
+    # use BBR for TCP congestion control for better general case throughput
+    net.ipv4.tcp_congestion_control: bbr

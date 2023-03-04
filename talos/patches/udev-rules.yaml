@@ -1,0 +1,5 @@
+- op: add
+  path: /machine/udev
+  value:
+    rules:
+      - ACTION=="add", SUBSYSTEM=="scsi_disk", ATTR{cache_type}:="write through"

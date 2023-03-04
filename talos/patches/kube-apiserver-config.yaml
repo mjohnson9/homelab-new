@@ -1,0 +1,4 @@
+# tell etcd which IP to advertise
+- op: add
+  path: /cluster/etcd/advertisedSubnets
+  value: ["10.0.2.0/24"]

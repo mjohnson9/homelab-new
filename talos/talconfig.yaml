@@ -4,22 +4,28 @@ kubernetesVersion: v1.25.7
 endpoint: https://api.k8s.clt.johnson.computer:6443
 domain: cluster.local
 allowSchedulingOnMasters: true
+
 additionalMachineCertSans:
   - api.k8s.clt.johnson.computer
   - 10.0.2.5
+
 additionalApiServerCertSans:
   - api.k8s.clt.johnson.computer
   - 10.0.2.5
+
 clusterPodNets:
   - 10.244.0.0/16
+
 clusterSvcNets:
   - 10.96.0.0/12
+
 cniConfig:
   name: custom
   urls:
-    - https://dl.johnson.software/k8s/cni-manifests/cilium.yaml
+    - https://s3.us-east-1.amazonaws.com/uploads2.johnson.software/cilium.yaml
+
 nodes:
-  - hostname: hv01
+  - hostname: hv01.clt.johnson.computer
     ipAddress: 10.0.2.10
     installDisk: /dev/nvme0n1
     controlPlane: true
@@ -32,13 +38,15 @@ nodes:
       - 1.0.0.1
       - 1.1.1.1
     networkInterfaces:
-      - interface: enxe41d2d09c2d0
+      - interface: eth2
         addresses:
           - 10.0.2.10/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: &control_node_vip
+          ip: 10.0.2.5
         # wireguard:
         #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
         #   listenPort: 51111
@@ -49,14 +57,14 @@ nodes:
         #         - 192.168.1.0/24
         #       persistentKeepaliveInterval: 10s
       # eno1
-      - interface: enx509a4c6059e7
+      - interface: eth0
         dhcp: false
         ignore: true
       # eno2
-      - interface: enx509a4c6059e8
+      - interface: eth1
         dhcp: false
         ignore: true
-  - hostname: hv02
+  - hostname: hv02.clt.johnson.computer
     ipAddress: 10.0.2.10
     installDisk: /dev/nvme0n1
     controlPlane: false
@@ -68,8 +76,10 @@ nodes:
     nameservers:
       - 1.0.0.1
       - 1.1.1.1
+    patches:
+      - "@./patches/enable-sr-iov.yaml"
     networkInterfaces:
-      - interface: enxe41d2d124690
+      - interface: eth4
         addresses:
           - 10.0.2.11/24
         mtu: 1500
@@ -86,22 +96,22 @@ nodes:
         #         - 192.168.1.0/24
         #       persistentKeepaliveInterval: 10s
       # eno1
-      - interface: enx44a8422df5b5
+      - interface: eth0
         dhcp: false
         ignore: true
       # eno2
-      - interface: enx44a8422df5b6
+      - interface: eth1
         dhcp: false
         ignore: true
       # eno3
-      - interface: enx44a8422df5b7
+      - interface: eth2
         dhcp: false
         ignore: true
       # eno4
-      - interface: enx44a8422df5b8
+      - interface: eth3
         dhcp: false
         ignore: true
-  - hostname: hv04
+  - hostname: hv04.clt.johnson.computer
     ipAddress: 10.0.2.13
     installDisk: /dev/nvme0n1
     controlPlane: true
@@ -114,13 +124,14 @@ nodes:
       - 1.0.0.1
       - 1.1.1.1
     networkInterfaces:
-      - interface: enxf452148885f0
+      - interface: eth4
         addresses:
           - 10.0.2.13/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: *control_node_vip
         # wireguard:
         #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
         #   listenPort: 51111
@@ -131,22 +142,22 @@ nodes:
         #         - 192.168.1.0/24
         #       persistentKeepaliveInterval: 10s
       # eno1
-      - interface: enx1418773363dd
+      - interface: eth0
         dhcp: false
         ignore: true
       # eno2
-      - interface: enx1418773363de
+      - interface: eth1
         dhcp: false
         ignore: true
       # eno3
-      - interface: enx1418773363df
+      - interface: eth2
         dhcp: false
         ignore: true
       # eno4
-      - interface: enx1418773363e0
+      - interface: eth3
         dhcp: false
         ignore: true
-  - hostname: hv05
+  - hostname: hv05.clt.johnson.computer
     ipAddress: 10.0.2.14
     installDisk: /dev/nvme0n1
     controlPlane: true
@@ -159,13 +170,14 @@ nodes:
       - 1.0.0.1
       - 1.1.1.1
     networkInterfaces:
-      - interface: enxe41d2d0fdf80
+      - interface: eth4
         addresses:
           - 10.0.2.14/24
         mtu: 1500
         routes:
           - network: 0.0.0.0/0
             gateway: 10.0.2.1
+        vip: *control_node_vip
         # wireguard:
         #   privateKey: 6NtibgkNWGSLp7ud6NgZr9k3kNhlQiaJCVW6vN+j9UY=
         #   listenPort: 51111
@@ -176,19 +188,19 @@ nodes:
         #         - 192.168.1.0/24
         #       persistentKeepaliveInterval: 10s
       # eno1
-      - interface: enx44a84241686d
+      - interface: eth0
         dhcp: false
         ignore: true
       # eno2
-      - interface: enx44a84241686e
+      - interface: eth1
         dhcp: false
         ignore: true
       # eno3
-      - interface: enx44a84241686f
+      - interface: eth2
         dhcp: false
         ignore: true
       # eno4
-      - interface: enx44a842416870
+      - interface: eth3
         dhcp: false
         ignore: true
   # - hostname: kworker1
@@ -206,19 +218,24 @@ nodes:
   #               routes:
   #                 - gateway: 192.168.200.1
   #                 - network: 0.0.0.0/0
-# controlPlane:
-#   patches:
-#     - |-
-#       - op: add
-#         path: /machine/kubelet/extraArgs
-#         value:
-#           feature-gates: GracefulNodeShutdown=true,MixedProtocolLBService=true
-#           rotate-server-certificates: "true"
-# worker:
-#   patches:
-#     - |-
-#       - op: add
-#         path: /machine/kubelet/extraArgs
-#         value:
-#           feature-gates: GracefulNodeShutdown=false,MixedProtocolLBService=false
-#           rotate-server-certificates: "true"
+
+controlPlane:
+  patches:
+    - "@./patches/intel-ucode.yaml"
+    - "@./patches/kernel-args.yaml"
+    - "@./patches/talos-config.yaml"
+    - "@./patches/sysctls.yaml"
+    - "@./patches/host-entries.yaml"
+    - "@./patches/udev-rules.yaml"
+    - "@./patches/kube-apiserver-config.yaml"
+    - "@./patches/kubelet-config.yaml"
+
+worker:
+  patches:
+    - "@./patches/intel-ucode.yaml"
+    - "@./patches/kernel-args.yaml"
+    - "@./patches/talos-config.yaml"
+    - "@./patches/sysctls.yaml"
+    - "@./patches/host-entries.yaml"
+    - "@./patches/udev-rules.yaml"
+    - "@./patches/kubelet-config.yaml"

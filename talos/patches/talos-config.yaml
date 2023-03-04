@@ -1,0 +1,32 @@
+# wipe install disk prior to installing OS
+- op: add
+  path: /machine/install/wipe
+  value: true
+
+# only use our own Kubernetes cluster for discovery
+- op: add
+  path: /cluster/discovery
+  value:
+    enabled: true
+    registries:
+      kubernetes:
+        disabled: false
+      service:
+        disabled: true
+
+# make generated kubeconfig only valid for 24 hours
+# this is because generating a kubeconfig from Talos should be a breakglass operation
+- op: add
+  path: /cluster/adminKubeconfig
+  value:
+    certLifetime: 24h
+
+# tell Talos what platform it's on
+- op: add
+  path: /machine/install/extraKernelArgs/-1
+  value: talos.platform=metal
+
+# tell Talos how to handle shutdown
+- op: add
+  path: /machine/install/extraKernelArgs/-1
+  value: talos.shutdown=poweroff

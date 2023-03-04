@@ -1,0 +1,12 @@
+- op: add
+  path: /machine/install/extraKernelArgs
+  value:
+    # enable serial consoles
+    - console=ttyS0,115200n8
+    - console=ttyS1,115200n8
+
+    # reinitialize memory to nulls when it's freed
+    - init_on_free=1
+
+    # enable IOMMU for SR-IOV
+    - intel_iommu=on

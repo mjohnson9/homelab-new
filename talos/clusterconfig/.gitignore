@@ -3,3 +3,7 @@ k8s.clt.johnson.computer-hv02.yaml
 k8s.clt.johnson.computer-hv04.yaml
 k8s.clt.johnson.computer-hv05.yaml
 talosconfig
+k8s.clt.johnson.computer-hv01.clt.johnson.computer.yaml
+k8s.clt.johnson.computer-hv02.clt.johnson.computer.yaml
+k8s.clt.johnson.computer-hv04.clt.johnson.computer.yaml
+k8s.clt.johnson.computer-hv05.clt.johnson.computer.yaml

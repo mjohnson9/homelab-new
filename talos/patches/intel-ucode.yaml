@@ -1,0 +1,4 @@
+- op: add
+  path: /machine/install/extensions
+  value:
+    - image: ghcr.io/siderolabs/intel-ucode:20230214
