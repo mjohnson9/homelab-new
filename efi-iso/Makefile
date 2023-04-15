@@ -1,4 +1,4 @@
-file_list = EFI/drivers/NvmExpressDxe.efi EFI/BOOT/BOOTX64.efi EFI/BOOT/BOOTIA32.efi EFI/BOOT/startup.nsh
+file_list = EFI/DRIVERS/NvmExpressDxe.efi EFI/BOOT/BOOTX64.efi EFI/BOOT/BOOTIA32.efi EFI/BOOT/startup.nsh EFI/DRIVERS/ipxe.efi
 
 .SECONDEXPANSION:
 .PHONY: all clean distclean test
